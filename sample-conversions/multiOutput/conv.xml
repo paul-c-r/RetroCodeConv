@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
+<!--
+  ~ RetroCodeConv is released under the GNU GPL v3.0 licence.
+  ~ You may copy, distribute and modify the software as long as you keep modifications under GPL.
+  ~ All derived works of, or applications using, RetroCodeConv must be released under the same licence and be made available to the Open Source community.
+  ~
+  ~ Please refer to https://www.gnu.org/licenses/gpl-3.0.html for all licence conditions.
+  ~
+  ~ Copyright © Paul C. Rau (Financial Systems Developer)
+  ~
+  -->
+
+<XCodeConversionFileType xmlns="http://converter.code.retro.org/xml/v1/types"
+                         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="XCodeConversionFileType">
+
+    <!--
+    NOTE:
+    REGEX reserved chars are <([{\^-=$!|]})?*+.>
+    A backslash is required before any of the above for the literal value.
+    < and > are reserved by XML. Use &lt; and &gt; instead.
+
+    Whenever we have more than one code section at the first level,
+    each of them gets a full copy of the specified source file.
+
+    In this example we create Target1.java and Target2.java with the source from
+    Source.java. The contents of the source are translated for the first target,
+    while they are just copied to the second one.
+
+    Although this is a simple example, it demonstrates an important capability
+    of the system.
+    -->
+
+    <title>Multiple file output with and without translations</title>
+
+    <sourceFileId>1</sourceFileId>
+    <codeSections>
+        <codeSection>
+            <id>1</id>
+            <title>TARGET 1 CONTAINER</title>
+            <!-- regex multi-line search -->
+            <searchStart>(?s).*</searchStart>
+            <codeBlock>ALL</codeBlock>
+            <targetFileId>1</targetFileId>
+            <translations>
+                <id>1</id>
+                <id>2</id>
+                <id>3</id>
+            </translations>
+        </codeSection>
+        <codeSection>
+            <id>2</id>
+            <title>TARGET 2 CONTAINER</title>
+            <searchStart>(?s).*</searchStart>
+            <codeBlock>ALL</codeBlock>
+            <targetFileId>2</targetFileId>
+            <translations>
+            </translations>
+        </codeSection>
+    </codeSections>
+
+</XCodeConversionFileType>

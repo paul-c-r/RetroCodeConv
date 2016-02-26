@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ RetroCodeConv is released under the GNU GPL v3.0 licence.
+  ~ You may copy, distribute and modify the software as long as you keep modifications under GPL.
+  ~ All derived works of, or applications using, RetroCodeConv must be released under the same licence and be made available to the Open Source community.
+  ~
+  ~ Please refer to https://www.gnu.org/licenses/gpl-3.0.html for all licence conditions.
+  ~
+  ~ Copyright © Paul C. Rau (Financial Systems Developer)
+  ~
+  -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+    http://www.springframework.org/schema/aop
+    http://www.springframework.org/schema/aop/spring-aop-3.2.xsd ">
+
+    <!-- LOADERS -->
+    <bean id="settingsLoader" class="converter.code.retro.org.xml.TransformLoader"/>
+    <bean id="translationsLoader" class="converter.code.retro.org.xml.TranslationsLoader">
+        <property name="transformLoader" ref="settingsLoader"/>
+    </bean>
+    <bean id="codeConversionsLoader" class="converter.code.retro.org.xml.CodeConversionsLoader">
+        <property name="transformLoader" ref="settingsLoader"/>
+    </bean>
+    <bean id="executor" class="converter.code.retro.org.execution.Executor">
+        <property name="translationsLoader" ref="translationsLoader"/>
+        <property name="codeConversionsLoader" ref="codeConversionsLoader"/>
+        <property name="transformLoader" ref="settingsLoader"/>
+    </bean>
+
+    <!--ASPECTS-->
+    <bean id="exceptionAspect" class="converter.code.retro.org.aspects.ExceptionAspect"/>
+    <bean id="executorAspect" class="converter.code.retro.org.aspects.ExecutorAspect">
+        <constructor-arg index="0" ref="executor"/>
+    </bean>
+
+    <aop:aspectj-autoproxy/>
+
+</beans>

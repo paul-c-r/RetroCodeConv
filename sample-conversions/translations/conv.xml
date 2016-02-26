@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
+<!--
+  ~ RetroCodeConv is released under the GNU GPL v3.0 licence.
+  ~ You may copy, distribute and modify the software as long as you keep modifications under GPL.
+  ~ All derived works of, or applications using, RetroCodeConv must be released under the same licence and be made available to the Open Source community.
+  ~
+  ~ Please refer to https://www.gnu.org/licenses/gpl-3.0.html for all licence conditions.
+  ~
+  ~ Copyright © Paul C. Rau (Financial Systems Developer)
+  ~
+  -->
+
+<XCodeConversionFileType xmlns="http://converter.code.retro.org/xml/v1/types"
+                         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="XCodeConversionFileType">
+
+    <!--
+    NOTE:
+    REGEX reserved chars are <([{\^-=$!|]})?*+.>
+    A backslash is required before any of the above for the literal value.
+    < and > are reserved by XML. Use &lt; and &gt; instead.
+
+    This example demonstrates the translation of many strings.
+    It converts a regex match string like [a-z], which is in the trans.xml file,
+    by feeding the contents of the searchStart element below.
+    It used the line end as the end of each block of code.
+
+    NOTE: The whole code section is translated, with the exception of the removed
+          search string, pre/post ambles and templates.
+    -->
+
+    <title>Translations</title>
+    <sourceFileId>1</sourceFileId>
+    <codeSections>
+        <codeSection>
+            <id>1</id>
+            <title>CONTAINER</title>
+            <searchStart>(?s).*</searchStart>
+            <codeBlock>ALL</codeBlock>
+            <processOnce>false</processOnce>
+            <targetFileId>1</targetFileId>
+            <codeSections>
+                <codeSection>
+                    <id>2</id>
+                    <title>Select - mixed case</title>
+                    <searchStart>String selectSQL</searchStart>
+                    <!-- Remove and replace with preamble so that it is not translated -->
+                    <removeSearch>true</removeSearch>
+                    <outputPreamble>String selectSQL</outputPreamble>
+                    <codeBlock>COMMAND</codeBlock>
+                    <translations>
+                        <id>1</id>
+                    </translations>
+                    <targetFileId>1</targetFileId>
+                </codeSection>
+                <codeSection>
+                    <id>3</id>
+                    <title>Lower to Upper</title>
+                    <searchStart>String lowerCase</searchStart>
+                    <removeSearch>true</removeSearch>
+                    <outputPreamble>String lowerCase</outputPreamble>
+                    <codeBlock>COMMAND</codeBlock>
+                    <translations>
+                        <id>1</id>
+                    </translations>
+                    <targetFileId>1</targetFileId>
+                </codeSection>
+                <codeSection>
+                    <id>4</id>
+                    <title>Upper to Lower</title>
+                    <searchStart>String upperCase</searchStart>
+                    <codeBlock>COMMAND</codeBlock>
+                    <removeSearch>true</removeSearch>
+                    <outputPreamble>String upperCase</outputPreamble>
+                    <translations>
+                        <id>2</id>
+                    </translations>
+                    <targetFileId>1</targetFileId>
+                </codeSection>
+                <codeSection>
+                    <id>5</id>
+                    <title>This to That</title>
+                    <searchStart>String translate</searchStart>
+                    <removeSearch>true</removeSearch>
+                    <codeBlock>COMMAND</codeBlock>
+                    <outputPreamble>String translate</outputPreamble>
+                    <translations>
+                        <id>3</id>
+                        <id>4</id>
+                    </translations>
+                    <targetFileId>1</targetFileId>
+                </codeSection>
+            </codeSections>
+        </codeSection>
+    </codeSections>
+
+</XCodeConversionFileType>

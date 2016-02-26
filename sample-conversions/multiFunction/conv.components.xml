@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
+<!--
+  ~ RetroCodeConv is released under the GNU GPL v3.0 licence.
+  ~ You may copy, distribute and modify the software as long as you keep modifications under GPL.
+  ~ All derived works of, or applications using, RetroCodeConv must be released under the same licence and be made available to the Open Source community.
+  ~
+  ~ Please refer to https://www.gnu.org/licenses/gpl-3.0.html for all licence conditions.
+  ~
+  ~ Copyright © Paul C. Rau (Financial Systems Developer)
+  ~
+  -->
+
+<XCodeSectionList xmlns="http://converter.code.retro.org/xml/v1/types"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="XCodeSectionList">
+
+    <!--
+    NOTE:
+    REGEX reserved chars are <([{\^-=$!|]})?*+.>
+    A backslash is required before any of the above for the literal value.
+    < and > are reserved by XML. Use &lt; and &gt; instead.
+    -->
+
+    <codeSection>
+        <id>2</id>
+        <title>STRING</title>
+        <searchStart>public String</searchStart>
+        <codeBlock>FUNCTION</codeBlock>
+        <targetFileId>1</targetFileId>
+        <codeSections>
+            <!-- select the for and remove it -->
+            <codeSection>
+                <id>10</id>
+                <targetFileId>1</targetFileId>
+                <searchStart>for</searchStart>
+                <codeBlock>FUNCTION</codeBlock>
+                <outputPreamble>numberString = "1 2 3";</outputPreamble>
+                <codeSectionComponents>
+                    <id>100</id>
+                </codeSectionComponents>
+            </codeSection>
+        </codeSections>
+    </codeSection>
+
+    <codeSection>
+        <id>3</id>
+        <title>VOID</title>
+        <searchStart>private void</searchStart>
+        <codeBlock>FUNCTION</codeBlock>
+        <targetFileId>1</targetFileId>
+        <translations>
+            <id>2</id>
+        </translations>
+    </codeSection>
+
+    <codeSection>
+        <id>4</id>
+        <title>INTEGER</title>
+        <searchStart>private int</searchStart>
+        <codeBlock>FUNCTION</codeBlock>
+        <targetFileId>1</targetFileId>
+        <translations>
+            <id>2</id>
+        </translations>
+    </codeSection>
+
+    <!-- Remove all the contents passed to this code section -->
+    <codeSection>
+        <id>100</id>
+        <targetFileId>1</targetFileId>
+        <!-- (?s) means select across multiple lines -->
+        <searchStart>(?s).*</searchStart>
+        <removeSearch>true</removeSearch>
+    </codeSection>
+</XCodeSectionList>
+

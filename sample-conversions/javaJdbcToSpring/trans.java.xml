@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
+<!--
+  ~ RetroCodeConv is released under the GNU GPL v3.0 licence.
+  ~ You may copy, distribute and modify the software as long as you keep modifications under GPL.
+  ~ All derived works of, or applications using, RetroCodeConv must be released under the same licence and be made available to the Open Source community.
+  ~
+  ~ Please refer to https://www.gnu.org/licenses/gpl-3.0.html for all licence conditions.
+  ~
+  ~ Copyright © Paul C. Rau (Financial Systems Developer)
+  ~
+  -->
+
+<XTranslationFileType xmlns="http://converter.code.retro.org/xml/v1/types"
+                      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="XTranslationFileType">
+
+    <!--
+    NOTE:
+    REGEX reserved chars are <([{\^-=$!|]})?*+.>
+    A backslash is required before any of the above for the literal value.
+    < and > are reserved by XML. Use &lt; and &gt; instead.
+
+    -->
+    <description>JDBC DAO Replacements</description>
+
+    <translations>
+        <translateItem>
+            <id>50</id>
+            <fromRegex>PreparedStatement[ a-zA-Z0-9]*;</fromRegex>
+            <toString>Map&lt;String, Object&gt; namedParams = new HashMap&lt;String, Object&gt;();</toString>
+        </translateItem>
+        <!-- Translate the field numbers -->
+        <translateItem>
+            <id>51</id>
+            <fromRegex>\(1</fromRegex>
+            <toString>("F1"</toString>
+            <processOnce>false</processOnce>
+        </translateItem>
+        <!-- Translate the field numbers -->
+        <translateItem>
+            <id>52</id>
+            <fromRegex>\(2</fromRegex>
+            <toString>("F2"</toString>
+            <processOnce>false</processOnce>
+        </translateItem>
+    </translations>
+
+</XTranslationFileType>

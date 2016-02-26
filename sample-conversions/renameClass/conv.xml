@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
+<!--
+  ~ RetroCodeConv is released under the GNU GPL v3.0 licence.
+  ~ You may copy, distribute and modify the software as long as you keep modifications under GPL.
+  ~ All derived works of, or applications using, RetroCodeConv must be released under the same licence and be made available to the Open Source community.
+  ~
+  ~ Please refer to https://www.gnu.org/licenses/gpl-3.0.html for all licence conditions.
+  ~
+  ~ Copyright © Paul C. Rau (Financial Systems Developer)
+  ~
+  -->
+
+<XCodeConversionFileType xmlns="http://converter.code.retro.org/xml/v1/types"
+                         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="XCodeConversionFileType">
+
+    <!--
+    NOTE:
+    REGEX reserved chars are <([{\^-=$!|]})?*+.>
+    A backslash is required before any of the above for the literal value.
+    < and > are reserved by XML. Use &lt; and &gt; instead.
+
+    This example uses a template to rename the class.
+    It removes the class structure from the source and wraps it in
+    a template. The template has placeholders, which take the contents
+    and put in the target file name as the class name.
+
+    -->
+
+    <title>While-For conversion</title>
+
+    <sourceFileId>1</sourceFileId>
+    <codeSections>
+        <codeSection>
+            <id>1</id>
+            <title>CLASS</title>
+            <searchStart>public class[ a-z0-9A-Z]*</searchStart>
+            <codeBlock>FUNCTION</codeBlock>
+            <targetFileId>1</targetFileId>
+            <!-- Strip away the class definition-->
+            <removeBrackets>true</removeBrackets>
+            <removeSearch>true</removeSearch>
+            <!-- Replace it with the template -->
+            <templateId>1</templateId>
+            <codeSections>
+                <codeSection>
+                    <id>2</id>
+                    <title>FUNCTION NAME</title>
+                    <targetFileId>1</targetFileId>
+                    <searchStart>public void oldFunctionName</searchStart>
+                    <removeSearch>true</removeSearch>
+                    <codeBlock>FUNCTION</codeBlock>
+                    <!-- Change the function name -->
+                    <outputPreamble>public void newFunctionName</outputPreamble>
+                </codeSection>
+            </codeSections>
+        </codeSection>
+    </codeSections>
+
+</XCodeConversionFileType>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
+<!--
+  ~ RetroCodeConv is released under the GNU GPL v3.0 licence.
+  ~ You may copy, distribute and modify the software as long as you keep modifications under GPL.
+  ~ All derived works of, or applications using, RetroCodeConv must be released under the same licence and be made available to the Open Source community.
+  ~
+  ~ Please refer to https://www.gnu.org/licenses/gpl-3.0.html for all licence conditions.
+  ~
+  ~ Copyright © Paul C. Rau (Financial Systems Developer)
+  ~
+  -->
+
+<XCodeConversionFileType xmlns="http://converter.code.retro.org/xml/v1/types"
+                         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="XCodeConversionFileType">
+
+    <!--
+    NOTE:
+    REGEX reserved chars are <([{\^-=$!|]})?*+.>
+    A backslash is required before any of the above for the literal value.
+    < and > are reserved by XML. Use &lt; and &gt; instead.
+
+    This example demonstrates how to deal with converting many functions in one
+    source file. It does so by creating a container code section for the class,
+    and then using function code sections as children for the processing.
+    The children are in the conv.components.xml file.
+
+    All the code sections are declared to process only once and one of
+    the child code sections is used twice (id=2).
+
+    The STRING child removes the FOR statement and replaces it with a simple
+    assignment on the string. The other functions do a simple translation from 10 to 99.
+    -->
+
+    <title>Multi-function processing</title>
+
+    <sourceFileId>1</sourceFileId>
+    <codeSections>
+        <codeSection>
+            <id>1</id>
+            <title>CLASS CONTAINER</title>
+            <searchStart>public class</searchStart>
+            <codeBlock>FUNCTION</codeBlock>
+            <targetFileId>1</targetFileId>
+            <codeSectionComponents>
+                <id>2</id>
+                <id>3</id>
+                <id>4</id>
+                <id>2</id>
+            </codeSectionComponents>
+            <translations>
+                <id>1</id>
+            </translations>
+        </codeSection>
+
+    </codeSections>
+
+</XCodeConversionFileType>

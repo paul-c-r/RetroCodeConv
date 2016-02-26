@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
+<!--
+  ~ RetroCodeConv is released under the GNU GPL v3.0 licence.
+  ~ You may copy, distribute and modify the software as long as you keep modifications under GPL.
+  ~ All derived works of, or applications using, RetroCodeConv must be released under the same licence and be made available to the Open Source community.
+  ~
+  ~ Please refer to https://www.gnu.org/licenses/gpl-3.0.html for all licence conditions.
+  ~
+  ~ Copyright © Paul C. Rau (Financial Systems Developer)
+  ~
+  -->
+
+<XCodeSectionList xmlns="http://converter.code.retro.org/xml/v1/types"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="XCodeSectionList">
+
+    <!--
+    NOTE:
+    REGEX reserved chars are <([{\^-=$!|]})?*+.>
+    A backslash is required before any of the above for the literal value.
+    < and > are reserved by XML. Use &lt; and &gt; instead.
+
+    -->
+    <codeSection>
+        <id>100</id>
+        <title>DAO class level, remove the shell</title>
+        <searchStart>(?m)^public class[ a-zA-Z0-9]*</searchStart>
+        <removeBrackets>true</removeBrackets>
+        <removeSearch>true</removeSearch>
+        <codeBlock>FUNCTION</codeBlock>
+        <targetFileId>1</targetFileId>
+        <!-- pass the contents to 200 for function processing -->
+        <codeSectionComponents>
+            <id>200</id>
+        </codeSectionComponents>
+    </codeSection>
+
+    <codeSection>
+        <id>200</id>
+        <title>PUBLIC METHODS</title>
+        <searchStart>public Collection&lt;SomeDTO&gt; getSomeDTOs</searchStart>
+        <!-- Keep the declaration of the function -->
+        <removeSearch>false</removeSearch>
+        <codeBlock>FUNCTION</codeBlock>
+        <targetFileId>1</targetFileId>
+        <translations>
+            <id>50</id>
+        </translations>
+        <codeSectionComponents>
+            <id>300</id>
+            <id>301</id>
+            <id>302</id>
+        </codeSectionComponents>
+    </codeSection>
+
+    <codeSection>
+        <id>300</id>
+        <title>TRY CONTENTS</title>
+        <searchStart>try[\s]*</searchStart>
+        <codeBlock>FUNCTION</codeBlock>
+        <removeSearch>true</removeSearch>
+        <removeBrackets>true</removeBrackets>
+        <translations>
+            <!-- remove the line with 'preparedStatement =' -->
+            <id>12</id>
+        </translations>
+        <targetFileId>1</targetFileId>
+        <codeSectionComponents>
+            <id>401</id>
+            <id>402</id>
+            <id>450</id>
+        </codeSectionComponents>
+    </codeSection>
+
+    <codeSection>
+        <id>401</id>
+        <targetFileId>1</targetFileId>
+        <searchStart>preparedStatement\.setInt</searchStart>
+        <removeSearch>true</removeSearch>
+        <outputPreamble>namedParams.put</outputPreamble>
+        <codeBlock>LINE_END</codeBlock>
+        <translations>
+            <id>51</id>
+            <id>52</id>
+        </translations>
+    </codeSection>
+
+    <codeSection>
+        <id>402</id>
+        <targetFileId>1</targetFileId>
+        <searchStart>preparedStatement\.setString</searchStart>
+        <removeSearch>true</removeSearch>
+        <outputPreamble>namedParams.put</outputPreamble>
+        <codeBlock>LINE_END</codeBlock>
+        <translations>
+            <id>51</id>
+            <id>52</id>
+        </translations>
+    </codeSection>
+
+    <codeSection>
+        <id>450</id>
+        <title>WHILE-IN-TEMPLATE</title>
+        <searchStart>while[\s]*</searchStart>
+        <codeBlock>FUNCTION</codeBlock>
+        <removeSearch>false</removeSearch>
+        <removeBrackets>false</removeBrackets>
+        <targetFileId>1</targetFileId>
+        <templateId>2</templateId>
+    </codeSection>
+
+    <!-- Delete everything in the catch block -->
+    <codeSection>
+        <id>301</id>
+        <title>CATCH CONTENTS</title>
+        <searchStart>catch[\s]*</searchStart>
+        <codeBlock>FUNCTION</codeBlock>
+        <removeSearch>true</removeSearch>
+        <removeBrackets>true</removeBrackets>
+        <targetFileId>1</targetFileId>
+        <codeSectionComponents>
+            <id>1000</id>
+        </codeSectionComponents>
+    </codeSection>
+
+    <!-- Delete everything in the catch block -->
+    <codeSection>
+        <id>302</id>
+        <title>FINALLY CONTENTS</title>
+        <searchStart>finally[\s]*</searchStart>
+        <codeBlock>FUNCTION</codeBlock>
+        <removeSearch>true</removeSearch>
+        <removeBrackets>true</removeBrackets>
+        <targetFileId>1</targetFileId>
+        <codeSectionComponents>
+            <id>1000</id>
+        </codeSectionComponents>
+    </codeSection>
+
+    <!-- Remove everything that is passed to this code section by its parent -->
+    <!-- This is a multi-line REGEX, to it select everything -->
+    <codeSection>
+        <id>1000</id>
+        <title>DELETE ALL</title>
+        <searchStart>(?s).*</searchStart>
+        <removeSearch>true</removeSearch>
+        <codeBlock>ALL</codeBlock>
+        <targetFileId>1</targetFileId>
+    </codeSection>
+
+</XCodeSectionList>
+

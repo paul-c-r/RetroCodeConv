@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
+<!--
+  ~ RetroCodeConv is released under the GNU GPL v3.0 licence.
+  ~ You may copy, distribute and modify the software as long as you keep modifications under GPL.
+  ~ All derived works of, or applications using, RetroCodeConv must be released under the same licence and be made available to the Open Source community.
+  ~
+  ~ Please refer to https://www.gnu.org/licenses/gpl-3.0.html for all licence conditions.
+  ~
+  ~ Copyright © Paul C. Rau (Financial Systems Developer)
+  ~
+  -->
+
+<XCodeConversionFileType xmlns="http://converter.code.retro.org/xml/v1/types"
+                         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="XCodeConversionFileType">
+
+    <!--
+    NOTE:
+    REGEX reserved chars are <([{\^-=$!|]})?*+.>
+    A backslash is required before any of the above for the literal value.
+    < and > are reserved by XML. Use &lt; and &gt; instead.
+
+    -->
+
+    <title>SQL Properties Conversion</title>
+
+    <sourceFileId>1</sourceFileId>
+    <codeSections>
+        <codeSection>
+            <id>500</id>
+            <title>JDBC Property to java SQL file</title>
+            <searchStart>com\.company\.dao\.jdbc\.somedao\.</searchStart>
+            <outputPreamble>public static final String ##_KEY_## = "##_VALUE_##";</outputPreamble>
+            <processOnce>false</processOnce>
+            <translations>
+                <id>1</id>
+                <id>2</id>
+            </translations>
+            <targetFileId>1</targetFileId>
+            <templateId>1</templateId>
+        </codeSection>
+    </codeSections>
+
+</XCodeConversionFileType>

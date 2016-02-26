@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
+<!--
+  ~ RetroCodeConv is released under the GNU GPL v3.0 licence.
+  ~ You may copy, distribute and modify the software as long as you keep modifications under GPL.
+  ~ All derived works of, or applications using, RetroCodeConv must be released under the same licence and be made available to the Open Source community.
+  ~
+  ~ Please refer to https://www.gnu.org/licenses/gpl-3.0.html for all licence conditions.
+  ~
+  ~ Copyright © Paul C. Rau (Financial Systems Developer)
+  ~
+  -->
+
+<XCodeSectionList xmlns="http://converter.code.retro.org/xml/v1/types"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="XCodeSectionList">
+
+    <!--
+    NOTE:
+    REGEX reserved chars are <([{\^-=$!|]})?*+.>
+    A backslash is required before any of the above for the literal value.
+    < and > are reserved by XML. Use &lt; and &gt; instead.
+    -->
+
+    <codeSection>
+        <id>100</id>
+        <title>Using becomes import</title>
+        <searchStart>using</searchStart>
+        <removeBrackets>true</removeBrackets>
+        <removeSearch>true</removeSearch>
+        <codeBlock>LINE_END</codeBlock>
+        <targetFileId>1</targetFileId>
+        <outputPreamble>import</outputPreamble>
+        <translations><id>1</id></translations>
+        <!-- Has to be below namespace, which becomes package -->
+        <targetOrder>2</targetOrder>
+        <processOnce>false</processOnce>
+    </codeSection>
+
+    <codeSection>
+        <id>200</id>
+        <title>NameSpace</title>
+        <searchStart>namespace</searchStart>
+        <removeBrackets>true</removeBrackets>
+        <removeSearch>true</removeSearch>
+        <codeBlock>FUNCTION</codeBlock>
+        <targetFileId>1</targetFileId>
+        <outputPreamble>package</outputPreamble>
+        <translations>
+            <!--Could make all lowercase-->
+            <!--<id>1</id>-->
+            <id>2</id>
+        </translations>
+        <codeSectionComponents>
+            <id>300</id>
+        </codeSectionComponents>
+    </codeSection>
+
+    <codeSection>
+        <id>300</id>
+        <title>Class</title>
+        <searchStart>public static</searchStart>
+        <removeSearch>true</removeSearch>
+        <codeBlock>FUNCTION</codeBlock>
+        <targetFileId>1</targetFileId>
+        <outputPreamble>public</outputPreamble>
+        <targetOrder>2</targetOrder>
+        <translations>
+            <!--Change : to Extends-->
+            <id>4</id>
+        </translations>
+        <codeSectionComponents>
+            <id>400</id>
+        </codeSectionComponents>
+    </codeSection>
+
+    <codeSection>
+        <id>400</id>
+        <title>Main Function</title>
+        <searchStart>public</searchStart>
+        <codeBlock>FUNCTION</codeBlock>
+        <targetFileId>1</targetFileId>
+        <targetOrder>2</targetOrder>
+        <translations>
+            <id>3</id>
+        </translations>
+    </codeSection>
+
+</XCodeSectionList>
+

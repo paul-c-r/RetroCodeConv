@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
+<!--
+  ~ RetroCodeConv is released under the GNU GPL v3.0 licence.
+  ~ You may copy, distribute and modify the software as long as you keep modifications under GPL.
+  ~ All derived works of, or applications using, RetroCodeConv must be released under the same licence and be made available to the Open Source community.
+  ~
+  ~ Please refer to https://www.gnu.org/licenses/gpl-3.0.html for all licence conditions.
+  ~
+  ~ Copyright © Paul C. Rau (Financial Systems Developer)
+  ~
+  -->
+
+<XTransformFile xmlns="http://converter.code.retro.org/xml/v1/types"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="XTransformFile">
+
+    <!-- This converts Java JDBC code to Spring JDBC
+    It uses recursive code sections, 2 templates (for class and extractor),
+    and translations to convert the code.
+    -->
+    <overwriteTargets>true</overwriteTargets>
+    <sources>
+        <fileItem>
+            <id>1</id>
+            <fileName>javaJdbcToSpring/source/SampleJavaJdbcDAO.java</fileName>
+            <contentsType>CODE</contentsType>
+        </fileItem>
+    </sources>
+
+    <targets>
+        <fileItem>
+            <id>1</id>
+            <fileName>javaJdbcToSpring/output/SampleSpringJdbcDAO.java</fileName>
+        </fileItem>
+    </targets>
+
+    <templateFiles>
+        <fileItem>
+            <id>1</id>
+            <fileName>template.java.txt</fileName>
+        </fileItem>
+        <fileItem>
+            <id>2</id>
+            <fileName>template.extractor.txt</fileName>
+        </fileItem>
+    </templateFiles>
+
+    <conversionFiles>
+        <fileName>conv.components.xml</fileName>
+        <fileName>conv.java.xml</fileName>
+    </conversionFiles>
+
+    <translationFiles>
+        <fileName>trans.java.xml</fileName>
+        <fileName>trans.remove.xml</fileName>
+    </translationFiles>
+
+</XTransformFile>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+  ~ RetroCodeConv is released under the GNU GPL v3.0 licence.
+  ~ You may copy, distribute and modify the software as long as you keep modifications under GPL.
+  ~ All derived works of, or applications using, RetroCodeConv must be released under the same licence and be made available to the Open Source community.
+  ~
+  ~ Please refer to https://www.gnu.org/licenses/gpl-3.0.html for all licence conditions.
+  ~
+  ~ Copyright © Paul C. Rau (Financial Systems Developer)
+  ~
+  -->
+
+<XCodeConversionFileType xmlns="http://converter.code.retro.org/xml/v1/types"
+                         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="XCodeConversionFileType">
+
+    <title>Conversion</title>
+
+    <sourceFileId>1</sourceFileId>
+    <codeSections>
+        <codeSection>
+            <id>1</id>
+            <title>Property File with weird chars</title>
+            <searchStart>com/\.*()!"%^&amp;*()-=</searchStart>
+            <searchEnd>//\.\{\}\(\\)</searchEnd>
+            <outputPreamble>public static final String ##_KEY_## = "##_VALUE_##";</outputPreamble>
+            <outputPostamble>Test Postamble</outputPostamble>
+                        <translations>
+                <id>1</id>
+                <id>55</id>
+            </translations>
+            <targetFileId>1</targetFileId>
+        </codeSection>
+    </codeSections>
+
+</XCodeConversionFileType>

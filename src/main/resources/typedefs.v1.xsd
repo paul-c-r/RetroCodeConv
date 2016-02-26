@@ -1,0 +1,610 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ RetroCodeConv is released under the GNU GPL v3.0 licence.
+  ~ You may copy, distribute and modify the software as long as you keep modifications under GPL.
+  ~ All derived works of, or applications using, RetroCodeConv must be released under the same licence and be made available to the Open Source community.
+  ~
+  ~ Please refer to https://www.gnu.org/licenses/gpl-3.0.html for all licence conditions.
+  ~
+  ~ Copyright © Paul C. Rau (Financial Systems Developer)
+  ~
+  -->
+
+<xsd:schema xmlns="http://converter.code.retro.org/xml/v1/types"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            targetNamespace="http://converter.code.retro.org/xml/v1/types" elementFormDefault="qualified"
+            attributeFormDefault="unqualified" version="1.0">
+
+    <xsd:annotation>
+        <xsd:documentation>
+            The XSD file for RetroCodeConv.
+        </xsd:documentation>
+    </xsd:annotation>
+
+    <xsd:simpleType name="XTranslationOperationType">
+        <xsd:annotation>
+            <xsd:documentation>
+                This indicates the type of translation operation to perform.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="REPLACE">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        Replaces the search REGEX with the toString.
+                        This is the default option if nothing is specified.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:enumeration>
+            <xsd:enumeration value="ALL_LOWER">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        Ignores the toString and does not replace the regex.
+                        It takes the text that satisfies fromRegex and converts it to lowercase.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:enumeration>
+            <xsd:enumeration value="ALL_UPPER">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        Ignores the toString and does not replace the regex.
+                        It takes the text that satisfies fromRegex and converts it to uppercase.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:enumeration>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="XCodeBlockType">
+        <xsd:annotation>
+            <xsd:documentation>
+                This value is used when the algorithm calculates the end of the code block.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="AUTO">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        Finds the end of the code block by using either the search end or
+                        an open bracket in the search start regex. If none of the above
+                        exist, then the code block is from the regex start to the end
+                        of the provided code.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:enumeration>
+            <xsd:enumeration value="ALL">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        Selects from the regex start (search start) to the end of the provided
+                        block.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:enumeration>
+            <xsd:enumeration value="SEARCH_END">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        The code block is from the search start to end.
+                        The searchEnd must be supplied.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:enumeration>
+            <xsd:enumeration value="FUNCTION">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        Selects a complete function (curly brackets) after the search start
+                        is matched in the provided code.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:enumeration>
+            <xsd:enumeration value="STATEMENT">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        Selects a complete statement (round brackets) after the search start
+                        is matched in the provided code.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:enumeration>
+            <xsd:enumeration value="COMMAND">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        Selects from the regex start search to the semi-colon.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:enumeration>
+            <xsd:enumeration value="LINE_END">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        From the start search to the end of the line.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:enumeration>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="XFileContentsType">
+        <xsd:annotation>
+            <xsd:documentation>
+                This indicates the type of source file to process.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="CODE">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        Select this to process C, CPP, C# and Java code files.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:enumeration>
+            <xsd:enumeration value="PROPERTIES">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        Use this to process key value pairs.
+                        Note: It does not support multi-level code sections.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:enumeration>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="XIdentifierType">
+        <xsd:annotation>
+            <xsd:documentation>Example is : 2d48e949-530d-a2f4-009a-042a2047df06</xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+            <xsd:pattern value="[0-9a-z]{8}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{12}"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:complexType name="XFileEntry">
+        <xsd:annotation>
+            <xsd:documentation>
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="id" type="xsd:int" minOccurs="1" maxOccurs="1">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        ID used to identify and use this file entry.
+                        It needs to be unique for any given type (source or target)
+                        over all the files in the settings.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="fileName" type="xsd:string" minOccurs="1" maxOccurs="1">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        The file name of the item. For source and target files this is
+                        relative to the current execution directory or absolute.
+                        For the template files this is relative to the settings folder
+                        (passed to RetroCode as an argument) or absolute.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="XFileSourceEntry">
+        <xsd:annotation>
+            <xsd:documentation>
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexContent>
+            <xsd:extension base="XFileEntry">
+                <xsd:sequence>
+                    <xsd:element name="contentsType" type="XFileContentsType" minOccurs="1" maxOccurs="1">
+                        <xsd:annotation>
+                            <xsd:documentation>
+                                The type of file to process (CODE or PROPERTIES)
+                            </xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:element>
+                </xsd:sequence>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:complexType name="XFileNameEntryList">
+        <xsd:annotation>
+            <xsd:documentation>
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="fileName" type="xsd:string" minOccurs="0" maxOccurs="unbounded">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        Used for translation and conversion files.
+                        This is relative to the settings folder (passed to RetroCode as an argument) or absolute.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="XFileEntryList">
+        <xsd:annotation>
+            <xsd:documentation>
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="fileItem" type="XFileEntry" minOccurs="0" maxOccurs="unbounded">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        Holds a list of file items.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="XFileSourceEntryList">
+        <xsd:annotation>
+            <xsd:documentation>
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="fileItem" type="XFileSourceEntry" minOccurs="0" maxOccurs="unbounded">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        Holds a list of source file items.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="XTranslationFileType">
+        <xsd:annotation>
+            <xsd:documentation>
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="description" type="xsd:string" minOccurs="1" maxOccurs="1">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        Description of the translation file.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="translations" type="XTranslateList" minOccurs="1" maxOccurs="1">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        A list of translation items.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="XTranslateEntry">
+        <xsd:annotation>
+            <xsd:documentation>
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="id" type="xsd:int" minOccurs="1" maxOccurs="1">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        The ID that uniquely identifies this translation.
+                        It must be unique across all files in the transformation.
+                        Note: This ID can be used multiple times, even within the same
+                        code block declaration for multiple translations
+                        (useful if processOnce is set to true)
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="fromRegex" type="xsd:string" minOccurs="1" maxOccurs="1">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        The regex to match for replacement or case operations.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="toString" type="xsd:string" minOccurs="0" maxOccurs="1">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        This is taken into consideration only if the operation is REPLACE.
+                        The fromRegex match (beginning to end) is replaced by this string.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="operation" type="XTranslationOperationType" minOccurs="0" maxOccurs="1">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        The operation to execute for this translation.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="processOnce" type="xsd:boolean" minOccurs="0" maxOccurs="1">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        If this is true then the translation stops after the first match.
+                        Otherwise it will search the full code block for matches and perform
+                        the operation on all of them.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="XTranslateList">
+        <xsd:annotation>
+            <xsd:documentation>
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="translateItem" type="XTranslateEntry" minOccurs="0" maxOccurs="unbounded">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        A list of translation items.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="XTransformFile">
+        <xsd:annotation>
+            <xsd:documentation>
+                The main settings file used for the overall conversion of a code base.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="overwriteTargets" type="xsd:boolean" minOccurs="1" maxOccurs="1">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        Set this to true to overwrite the target files when converting.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="sources" type="XFileSourceEntryList" minOccurs="1" maxOccurs="1">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        The source files to convert.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="targets" type="XFileEntryList" minOccurs="1" maxOccurs="1">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        The output files.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="templateFiles" type="XFileEntryList" minOccurs="1" maxOccurs="1">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        The list of templates to use in the code sections.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="conversionFiles" type="XFileNameEntryList" minOccurs="1" maxOccurs="1">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        The conversion files to use for the conversion.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="translationFiles" type="XFileNameEntryList" minOccurs="1" maxOccurs="1">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        The list of translation files to use in the transformation.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="XIdList">
+        <xsd:annotation>
+            <xsd:documentation>
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="id" type="xsd:int" minOccurs="0" maxOccurs="unbounded">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        List of pre defined IDs to use.
+                        This is used in the code section.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="XCodeSectionList">
+        <xsd:annotation>
+            <xsd:documentation>
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="codeSection" type="XCodeSection" minOccurs="0" maxOccurs="unbounded">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        List of code sections. This is also the root element of one of the conversion
+                        file types. This file contains code sections as resources for use by other
+                        code sections.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="XCodeConversionFileType">
+        <xsd:annotation>
+            <xsd:documentation>
+                This type holds the configuration for converting a piece or pieces of code from a
+                single source file to one or many destination files. This files causes a
+                conversion to be executed.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="title" type="xsd:string" minOccurs="1" maxOccurs="1">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        The title of the code conversion file type.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="sourceFileId" type="xsd:int" minOccurs="1" maxOccurs="1">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        The ID of the source file to use for this conversion.
+                        The ID is declared in the transform.xml file.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="codeSections" type="XCodeSectionList" minOccurs="1" maxOccurs="1">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        The list of code sections to use in this conversion.
+                        All of the first level code sections get a complete copy of the source file
+                        to work with. This is a great way to output multiple copies of the source
+                        and process them in different ways.
+                        They can be processes to many or one target file.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="XCodeSection">
+        <xsd:annotation>
+            <xsd:documentation>
+                This type contains the settings for converting code to a destination file.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:all>
+            <xsd:element name="id" type="xsd:int" minOccurs="1" maxOccurs="1">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        The ID of this code section, to be used by other code sections in
+                        the codeSectionComponents element.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="title" type="xsd:string" minOccurs="0" maxOccurs="1">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        The title of this code section. It is automatically generated if
+                        there is not one assigned.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="targetFileId" type="xsd:int" minOccurs="1" maxOccurs="1">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        The ID of the target file, which is declared in the transform.xml.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="targetOrder" type="xsd:int" minOccurs="0" maxOccurs="1">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        This is the number of spaces to move the output of this code section
+                        forward in the target. This allows for code sections after this
+                        to be output before this.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="templateId" type="xsd:int" minOccurs="0" maxOccurs="1">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        The template to use to wrap the output of this code section.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="searchStart" type="xsd:string" minOccurs="1" maxOccurs="1">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        This is used to find the start of the code block that is selected
+                        by this code section for its processing. (regex)
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="searchEnd" type="xsd:string" minOccurs="0" maxOccurs="1">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        The search end regex to mark the end of the coe block.
+                        This is only taken into consideration of the code block is AUTO
+                        or SEARCH_END.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="outputPreamble" type="xsd:string" minOccurs="0" maxOccurs="1">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        This is output before the output of the code from the code section.
+                        Note, it is within the template.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="outputPostamble" type="xsd:string" minOccurs="0" maxOccurs="1">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        This is output after the code of the current code section, but before
+                        the end of the template.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="removeBrackets" type="xsd:boolean" minOccurs="0" maxOccurs="1">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        Set this to true to remove the brackets from the FUNCTION or COMMAND
+                        code block types.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="removeSearch" type="xsd:boolean" minOccurs="0" maxOccurs="1">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        This removes the code that matches the search start regex.
+                        It is useful for replacement with the preamble.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="processOnce" type="xsd:boolean" minOccurs="0" maxOccurs="1">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        This indicates that we only process this code section once for the
+                        current code block.
+                        Note: If this code section is declared multiple times in a parent then
+                        it will be execute multiple times (even with processOnce set to true).
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="codeBlock" type="XCodeBlockType" minOccurs="0" maxOccurs="1">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        This specifies the type of processing to perform to find the end of
+                        the code block.
+                        See the code block type for more information.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="translations" type="XIdList" minOccurs="0" maxOccurs="1">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        The IDs of the translations we want to perform on this code block.
+                        We are allowed to use the same ID multiple times.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="codeSectionComponents" type="XIdList" minOccurs="0" maxOccurs="1">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        The IDs of the children code sections, that will receive the code block
+                        from this code sections processing.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="codeSections" type="XCodeSectionList" minOccurs="0" maxOccurs="1">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        The same as above, but these are actual code sections.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+        </xsd:all>
+    </xsd:complexType>
+
+</xsd:schema>

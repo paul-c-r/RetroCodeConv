@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
+<!--
+  ~ RetroCodeConv is released under the GNU GPL v3.0 licence.
+  ~ You may copy, distribute and modify the software as long as you keep modifications under GPL.
+  ~ All derived works of, or applications using, RetroCodeConv must be released under the same licence and be made available to the Open Source community.
+  ~
+  ~ Please refer to https://www.gnu.org/licenses/gpl-3.0.html for all licence conditions.
+  ~
+  ~ Copyright © Paul C. Rau (Financial Systems Developer)
+  ~
+  -->
+
+<XTranslationFileType xmlns="http://converter.code.retro.org/xml/v1/types"
+                      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="XTranslationFileType">
+
+    <description>Remove unwanted parts of the property name</description>
+
+    <!--
+    NOTE:
+    REGEX reserved chars are <([{\^-=$!|]})?*+.>
+    A backslash is required before any of the above for the literal value.
+    < and > are reserved by XML. Use &lt; and &gt; instead.
+
+    -->
+    <translations>
+
+        <translateItem>
+            <id>1</id>
+            <fromRegex>[a-z]</fromRegex>
+            <operation>ALL_UPPER</operation>
+            <processOnce>false</processOnce>
+        </translateItem>
+
+        <translateItem>
+            <id>2</id>
+            <fromRegex>[A-Z]</fromRegex>
+            <operation>ALL_LOWER</operation>
+            <processOnce>false</processOnce>
+        </translateItem>
+
+        <translateItem>
+            <id>3</id>
+            <fromRegex>this</fromRegex>
+            <toString>that</toString>
+            <processOnce>false</processOnce>
+        </translateItem>
+        <translateItem>
+            <id>4</id>
+            <fromRegex>that</fromRegex>
+            <toString>this</toString>
+            <processOnce>false</processOnce>
+        </translateItem>
+    </translations>
+
+</XTranslationFileType>

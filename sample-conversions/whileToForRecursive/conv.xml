@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
+<!--
+  ~ RetroCodeConv is released under the GNU GPL v3.0 licence.
+  ~ You may copy, distribute and modify the software as long as you keep modifications under GPL.
+  ~ All derived works of, or applications using, RetroCodeConv must be released under the same licence and be made available to the Open Source community.
+  ~
+  ~ Please refer to https://www.gnu.org/licenses/gpl-3.0.html for all licence conditions.
+  ~
+  ~ Copyright © Paul C. Rau (Financial Systems Developer)
+  ~
+  -->
+
+<XCodeConversionFileType xmlns="http://converter.code.retro.org/xml/v1/types"
+                         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="XCodeConversionFileType">
+
+    <!--
+    NOTE:
+    REGEX reserved chars are <([{\^-=$!|]})?*+.>
+    A backslash is required before any of the above for the literal value.
+    < and > are reserved by XML. Use &lt; and &gt; instead.
+
+    This conversion demonstrates how a piece of code can be processed
+    recursively while ordering the output.
+    In other words, the i++ statement is processed by another code section inside the while
+    code function section, but it is output before the contents of the while loop.
+
+    This is done with the target order element, which simply indicates how much of a gap to leave
+    for other code to be inserted into the output map.
+    Below we see that the WHILE statement has a target order of 2. This allows for the insertion
+    of one code section before the while contents.
+    NOTE, this includes sub code sections of the while itself!
+    In this case, the processing of the i++ is output before the while itself. Simple, but very
+    affective.
+    -->
+
+    <title>While-For conversion</title>
+
+    <sourceFileId>1</sourceFileId>
+    <codeSections>
+        <codeSection>
+            <id>1</id>
+            <title>CONTAINER</title>
+            <!-- select everything with multiline -->
+            <searchStart>(?s).*</searchStart>
+            <codeBlock>ALL</codeBlock>
+            <targetFileId>1</targetFileId>
+            <outputPreamble>for (</outputPreamble>
+            <translations>
+                <id>1</id>
+                <id>1</id>
+            </translations>
+            <codeSections>
+                <codeSection>
+                    <id>2</id>
+                    <title>WHILE STATEMENT</title>
+                    <targetFileId>1</targetFileId>
+                    <searchStart>while</searchStart>
+                    <removeSearch>true</removeSearch>
+                    <removeBrackets>true</removeBrackets>
+                    <codeBlock>STATEMENT</codeBlock>
+                    <outputPostamble>;</outputPostamble>
+                    <translations>
+                        <id>1</id>
+                        <id>1</id>
+                    </translations>
+                </codeSection>
+                <codeSection>
+                    <id>3</id>
+                    <title>WHILE FUNCTION</title>
+                    <targetFileId>1</targetFileId>
+                    <!-- Looking for the gap between the WHILE and the open bracket -->
+                    <!-- Any number of spaces (even none) will satisfy this match -->
+                    <searchStart>\s*</searchStart>
+                    <removeBrackets>false</removeBrackets>
+                    <codeBlock>FUNCTION</codeBlock>
+                    <targetOrder>2</targetOrder>
+                    <codeSections>
+                        <codeSection>
+                            <id>4</id>
+                            <title>COUNTER</title>
+                            <targetFileId>1</targetFileId>
+                            <searchStart>[\S]\+\+;</searchStart>
+                            <removeSearch>false</removeSearch>
+                            <codeBlock>LINE_END</codeBlock>
+                            <targetOrder>1</targetOrder>
+                            <outputPostamble>)</outputPostamble>
+                            <translations>
+                                <id>2</id>
+                                <id>1</id>
+                            </translations>
+                        </codeSection>
+                    </codeSections>
+                </codeSection>
+            </codeSections>
+        </codeSection>
+    </codeSections>
+
+</XCodeConversionFileType>

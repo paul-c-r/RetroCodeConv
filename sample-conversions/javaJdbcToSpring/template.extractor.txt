@@ -1,0 +1,9 @@
+ResultSetExtractor<Collection<SomeDTO>> resultSetExtractor =
+new ResultSetExtractor<Collection<SomeDTO>>() {
+    public Collection<SomeDTO> extractData(ResultSet res)
+    throws SQLException, DataAccessException {
+        List<SomeDTO> dtoList = new ArrayList<SomeDTO>();
+        ##_CONTENTS_##
+        return dtoList;
+    }
+};

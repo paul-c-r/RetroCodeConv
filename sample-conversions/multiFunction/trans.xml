@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
+<!--
+  ~ RetroCodeConv is released under the GNU GPL v3.0 licence.
+  ~ You may copy, distribute and modify the software as long as you keep modifications under GPL.
+  ~ All derived works of, or applications using, RetroCodeConv must be released under the same licence and be made available to the Open Source community.
+  ~
+  ~ Please refer to https://www.gnu.org/licenses/gpl-3.0.html for all licence conditions.
+  ~
+  ~ Copyright © Paul C. Rau (Financial Systems Developer)
+  ~
+  -->
+
+<XTranslationFileType xmlns="http://converter.code.retro.org/xml/v1/types"
+                      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="XTranslationFileType">
+
+    <!--
+    NOTE:
+    REGEX reserved chars are <([{\^-=$!|]})?*+.>
+    A backslash is required before any of the above for the literal value.
+    < and > are reserved by XML. Use &lt; and &gt; instead.
+
+    -->
+    <description>Simple Replacements</description>
+
+    <translations>
+
+        <translateItem>
+            <id>1</id>
+            <fromRegex>Source</fromRegex>
+            <toString>Target</toString>
+        </translateItem>
+
+        <translateItem>
+            <id>2</id>
+            <fromRegex>10</fromRegex>
+            <toString>99</toString>
+        </translateItem>
+
+    </translations>
+
+</XTranslationFileType>
